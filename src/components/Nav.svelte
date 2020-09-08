@@ -46,6 +46,12 @@
     padding: 1em 0.5em;
     display: block;
   }
+  svg {
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    vertical-align: text-bottom;
+  }
 </style>
 
 <nav>
@@ -53,21 +59,17 @@
     <li>
       <a
         aria-current={segment === undefined ? 'page' : undefined}
-        href=".">home</a>
+        href=".">Home</a>
     </li>
-    <!-- <li>
+    <li>
       <a
-        aria-current={segment === 'about' ? 'page' : undefined}
-        href="about">about</a>
-    </li> -->
-
-    <!-- for the blog link, we're using rel=prefetch so that Sapper prefetches
-		     the blog data when we hover over the link or tap it on a touchscreen -->
-    <!-- <li>
-      <a
-        rel="prefetch"
-        aria-current={segment === 'blog' ? 'page' : undefined}
-        href="blog">blog</a>
-    </li> -->
+        target="_blank"
+        rel="noreferrer noopener"
+        href="https://diagrams.mingrammer.com/docs/getting-started/examples">Docs
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path
+            fill="#212B36"
+            d="M17 2a1 1 0 0 1 1 1v5a1 1 0 1 1-2 0V5.414l-5.293 5.293a.997.997 0 0 1-1.414 0 .999.999 0 0 1 0-1.414L14.586 4H12a1 1 0 1 1 0-2h5zm0 9a1 1 0 0 1 1 1v5a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1h5a1 1 0 1 1 0 2H4v12h12v-4a1 1 0 0 1 1-1z" /></svg>
+      </a>
+    </li>
   </ul>
 </nav>
