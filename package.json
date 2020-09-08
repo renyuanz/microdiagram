@@ -1,6 +1,6 @@
 {
-  "name": "TODO",
-  "description": "TODO",
+  "name": "sappagram",
+  "description": "Diagrams webservice built on Sapper",
   "version": "0.0.1",
   "scripts": {
     "dev": "sapper dev",
@@ -11,15 +11,15 @@
     "cy:open": "cypress open",
     "test": "run-p --race dev cy:run"
   },
+  "engines": {
+    "node": "12"
+  },
   "dependencies": {
     "body-parser": "^1.19.0",
     "compression": "^1.7.1",
-    "fastify": "^3.3.0",
-    "middie": "^5.1.0",
     "polka": "next",
     "sirv": "^1.0.0",
-    "slugify": "^1.4.5",
-    "svelte-codemirror": "^1.2.1"
+    "slugify": "^1.4.5"
   },
   "devDependencies": {
     "@babel/core": "^7.0.0",
