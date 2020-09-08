@@ -5,7 +5,7 @@ import slugify from "slugify";
 
 const outputPrefix = "tmp";
 
-const rootDir = path.resolve(__dirname, "../../../../");
+const rootDir = path.resolve(__dirname, "../../../");
 const pyagramDir = path.join(rootDir, "pyagram");
 
 export const create = async (req, res) => {
@@ -20,8 +20,9 @@ export const create = async (req, res) => {
     });
     res.end(file);
   } catch (e) {
-    const msg = e?.split("line")[1];
-    res.end("line " + msg);
+    console.log(e);
+    res.end();
+    // res.end("line " + msg);
   }
 };
 

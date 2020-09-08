@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "body-parser": "^1.19.0",
+    "codemirror": "^5.57.0",
     "compression": "^1.7.1",
     "polka": "next",
     "sirv": "^1.0.0",
