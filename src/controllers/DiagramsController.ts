@@ -21,8 +21,11 @@ export const create = async (req, res) => {
     res.end(file);
   } catch (e) {
     console.log(e);
-    res.end();
-    // res.end("line " + msg);
+    res.writeHead(400, {
+      "Content-Type": "application/json",
+    });
+    const msg = e?.split("line")?.[1];
+    res.end(msg ? "line " + msg : "error");
   }
 };
 

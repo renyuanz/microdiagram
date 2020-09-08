@@ -10,10 +10,24 @@
 <script lang="ts">
   export let title: string = "Hello Sappagram";
 
-  let filename: string;
-  let filecontent: string = "123";
+  let error: string;
+  let filename: string = "Diagram";
+  let filecontent: string = `from diagrams import Diagram
+from diagrams.aws.compute import EC2
+from diagrams.aws.database import RDS
+from diagrams.aws.network import ELB
+
+with Diagram("Grouped Workers", show=False, direction="TB"):
+  ELB("lb") >> [EC2("worker1"),
+                EC2("worker2"),
+                EC2("worker3"),
+                EC2("worker4"),
+                EC2("worker5")] >> RDS("events")  
+`;
   let result: string;
   async function handleSubmit() {
+    result = undefined;
+    error = undefined;
     const res = await fetch("/diagrams", {
       method: "POST",
       headers: {
@@ -25,44 +39,17 @@
       }),
     });
 
-    const imageData = await res.blob();
-    result = URL.createObjectURL(imageData);
+    if (res.ok) {
+      const imageData = await res.blob();
+      result = URL.createObjectURL(imageData);
+    } else {
+      const text = await res.text();
+      error = text;
+    }
   }
 </script>
 
 <style>
-  /* .codemirror-container {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    border: none;
-    line-height: 1.5;
-    overflow: hidden;
-  }
-  .codemirror-container :global(.CodeMirror) {
-    height: 100%;
-    background: transparent;
-    font: 400 14px/1.7 var(--font-mono);
-    color: var(--base);
-  }
-  .codemirror-container.flex :global(.CodeMirror) {
-    height: auto;
-  }
-  .codemirror-container.flex :global(.CodeMirror-lines) {
-    padding: 0;
-  }
-  .codemirror-container :global(.CodeMirror-gutters) {
-    padding: 0 16px 0 8px;
-    border: none;
-  }
-  .codemirror-container :global(.error-loc) {
-    position: relative;
-    border-bottom: 2px solid #da106e;
-  }
-  .codemirror-container :global(.error-line) {
-    background-color: rgba(200, 0, 0, 0.05);
-  } */
-
   h1,
   figure {
     text-align: center;
@@ -82,8 +69,18 @@
 
   img {
     width: 100%;
-    max-width: 1000px;
+    max-width: 500px;
     margin: 0 0 1em 0;
+  }
+  .codemirror-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    border: none;
+    line-height: 1.5;
+    overflow: hidden;
+    border: solid 1px #333;
+    margin-top: 20px;
   }
 </style>
 
@@ -91,7 +88,7 @@
   <title>{title}</title>
 </svelte:head>
 
-<h1>make diagram great again</h1>
+<h1>Diagrams as code</h1>
 
 <figure>
   {#if result}
@@ -104,6 +101,10 @@
     <figcaption>Have fun with Sappagram!</figcaption>
   {/if}
 </figure>
+
+{#if error}
+  <p><span style="color:red"> Something went wrong: </span> <br /> {error}</p>
+{/if}
 
 <form on:submit|preventDefault={handleSubmit}>
   <input

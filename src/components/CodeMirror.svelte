@@ -16,7 +16,6 @@
   export let value = "";
   export let readonly = false;
   export let errorLoc = null;
-  export let flex = false;
   export let lineNumbers = true;
   export let tab = true;
   let w;
@@ -58,9 +57,10 @@
       name: "javascript",
       json: true,
     },
-    svelte: {
-      name: "handlebars",
-      base: "text/html",
+    python: {
+      name: "python",
+      version: 3,
+      singleLineStringErrors: false,
     },
   };
   const refs = {};
@@ -103,13 +103,13 @@
   onMount(() => {
     if (_CodeMirror) {
       CodeMirror = _CodeMirror;
-      createEditor(mode || "svelte").then(() => {
+      createEditor(mode || "python").then(() => {
         if (editor) editor.setValue(value || "");
       });
     } else {
       codemirror_promise.then(async (mod) => {
         CodeMirror = mod.default;
-        await createEditor(mode || "svelte");
+        await createEditor(mode || "python");
         if (editor) editor.setValue(value || "");
       });
     }
@@ -126,8 +126,8 @@
       lineNumbers,
       lineWrapping: true,
       indentWithTabs: true,
-      indentUnit: 2,
-      tabSize: 2,
+      indentUnit: 4,
+      tabSize: 4,
       value: "",
       mode: modes[mode] || {
         name: mode,
@@ -182,6 +182,10 @@
     color: #ccc;
     tab-size: 2;
     -moz-tab-size: 2;
+  }
+  .flex pre {
+    padding: 0 0 0 4px;
+    height: auto;
   }
 </style>
 

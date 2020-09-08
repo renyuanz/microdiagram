@@ -1,4 +1,5 @@
 import "codemirror/mode/javascript/javascript.js";
+import "codemirror/mode/python/python.js";
 // import 'codemirror/mode/shell/shell.js';
 import "codemirror/mode/handlebars/handlebars.js";
 import "codemirror/mode/htmlmixed/htmlmixed.js";
