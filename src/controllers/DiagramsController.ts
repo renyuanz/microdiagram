@@ -12,7 +12,7 @@ const pyagramDir = path.join(rootDir, "pyagram");
 export const create = async (req, res) => {
   try {
     const { filename, filecontent } = req.body;
-    const output = await genDiagram(outputPrefix, filename, filecontent);
+    const output = await genDiagram(filename, filecontent);
     const file = await fs.promises.readFile(output);
 
     res.writeHead(200, {
@@ -30,20 +30,18 @@ export const create = async (req, res) => {
   }
 };
 
-export const genDiagram = async (
-  dir: string,
-  filename: string,
-  filecontent: string
-) => {
-  const finalfilename = `${dir}/${filename}`;
-
-  const args = `"${filename}", show=False`;
+export const genDiagram = async (filename: string, filecontent: string) => {
+  const finalfilename = `${outputPrefix}/${filename}`;
+  const args = `"${filename}", show=False, filename="${filename}"`;
   const content = filecontent.replace(
     /Diagram\(([^)]+)\)/g,
     `Diagram(${args})`
   );
 
-  const pythonFile = path.join(pyagramDir, `${(slugify(filename), "_")}.py`);
+  const pythonFile = path.join(
+    pyagramDir,
+    `${slugify(filename, { replacement: "_", lower: true })}.py`
+  );
   await fs.promises.writeFile(pythonFile, content);
 
   const outputFilename = `${finalfilename}.png`;
