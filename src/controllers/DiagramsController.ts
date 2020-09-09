@@ -6,6 +6,7 @@ import slugify from "slugify";
 const outputPrefix = "tmp";
 
 const rootDir = path.resolve(__dirname, "../../../");
+const tmpDir = path.resolve(rootDir, "tmp");
 const pyagramDir = path.join(rootDir, "pyagram");
 
 export const create = async (req, res) => {
@@ -36,7 +37,7 @@ export const genDiagram = async (
 ) => {
   const finalfilename = `${dir}/${filename}`;
 
-  const args = `"${filename}", show=False, filename="${finalfilename}"`;
+  const args = `"${filename}", show=False`;
   const content = filecontent.replace(
     /Diagram\(([^)]+)\)/g,
     `Diagram(${args})`
@@ -47,16 +48,22 @@ export const genDiagram = async (
 
   const outputFilename = `${finalfilename}.png`;
   return new Promise((resolve: (output: string) => void, reject) => {
-    exec(`python ${pythonFile}`, (error, stdout, stderr) => {
-      if (error) {
-        reject(error.message);
-        return;
+    exec(
+      `python ${pythonFile}`,
+      {
+        cwd: tmpDir,
+      },
+      (error, stdout, stderr) => {
+        if (error) {
+          reject(error.message);
+          return;
+        }
+        if (stderr) {
+          reject(stderr);
+          return;
+        }
+        resolve(outputFilename);
       }
-      if (stderr) {
-        reject(stderr);
-        return;
-      }
-      resolve(outputFilename);
-    });
+    );
   });
 };
