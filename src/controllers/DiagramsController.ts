@@ -21,7 +21,6 @@ export const create = async (req, res) => {
     });
     res.end(file);
   } catch (e) {
-    console.log(e);
     res.writeHead(400, {
       "Content-Type": "application/json",
     });

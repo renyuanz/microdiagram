@@ -1,6 +1,7 @@
 <script context="module">
   const is_browser = typeof window !== "undefined";
   import CodeMirror from "../components/CodeMirror.svelte";
+  import examples from "../constants/examples";
   import "codemirror/lib/codemirror.css";
   if (is_browser) {
     import("../codeMirrorPlugins.js");
@@ -8,8 +9,10 @@
 </script>
 
 <script lang="ts">
+  import ExamplesNav from "../components/ExamplesNav.svelte";
   export let title: string = "Hello Sappagram";
 
+  let _codeEditor;
   let error: string;
   let filecontent: string = `from diagrams import Diagram
 from diagrams.aws.compute import EC2
@@ -21,13 +24,12 @@ with Diagram("Grouped Workers", show=False, direction="TB"):
                 EC2("worker2"),
                 EC2("worker3"),
                 EC2("worker4"),
-                EC2("worker5")] >> RDS("events")  
-`;
+                EC2("worker5")] >> RDS("events")`;
   let result: string;
   let loading: boolean;
   async function handleSubmit() {
-    result = undefined;
-    error = undefined;
+    resetState();
+
     loading = true;
     const res = await fetch("/diagrams", {
       method: "POST",
@@ -49,6 +51,16 @@ with Diagram("Grouped Workers", show=False, direction="TB"):
       error = text;
     }
   }
+
+  function resetState() {
+    result = undefined;
+    error = undefined;
+  }
+
+  function handleExampleChange(e) {
+    resetState();
+    _codeEditor.update(examples[e.detail.value] || "");
+  }
 </script>
 
 <style>
@@ -59,8 +71,6 @@ with Diagram("Grouped Workers", show=False, direction="TB"):
   }
 
   h1 {
-    font-size: 2.8em;
-    text-transform: uppercase;
     font-weight: 700;
     margin: 0 0 0.5em 0;
   }
@@ -71,18 +81,13 @@ with Diagram("Grouped Workers", show=False, direction="TB"):
 
   img {
     width: 100%;
-    max-width: 500px;
+
     margin: 0 0 1em 0;
   }
-  .codemirror-container {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    border: none;
-    line-height: 1.5;
-    overflow: hidden;
-    border: solid 1px #333;
-    margin-top: 20px;
+
+  .flex {
+    display: flex;
+    justify-content: space-around;
   }
 </style>
 
@@ -96,22 +101,26 @@ with Diagram("Grouped Workers", show=False, direction="TB"):
   <p><span style="color:red"> Something went wrong: </span> <br /> {error}</p>
 {/if}
 
-<button
-  on:click={handleSubmit}
-  disabled={loading}>{loading ? `Processing...` : 'Build'}</button>
 <div class="flex">
-  <div class="codemirror-container flex">
-    <CodeMirror
-      value={filecontent}
-      on:change={(val) => (filecontent = val.detail.value)} />
+  <div>
+    <button
+      on:click={handleSubmit}
+      disabled={loading}>{loading ? `Processing...` : 'Build'}</button>
+    <div class="flex">
+      <CodeMirror
+        bind:this={_codeEditor}
+        value={filecontent}
+        on:change={(val) => (filecontent = val.detail.value)} />
+    </div>
+    {#if result}
+      <figure>
+        <img src={result} alt="" />
+        <a download="diagram.png" href={result} title="ImageName">
+          Click to download
+        </a>
+      </figure>
+    {/if}
   </div>
 
-  {#if result}
-    <figure>
-      <img src={result} alt="" />
-      <a download="diagram.png" href={result} title="ImageName">
-        Click to download
-      </a>
-    </figure>
-  {/if}
+  <ExamplesNav on:change={handleExampleChange} />
 </div>

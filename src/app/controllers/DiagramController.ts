@@ -16,7 +16,6 @@ export const create = async (req, res) => {
     res.writeHead(400, {
       "Content-Type": "application/json",
     });
-    console.log(e);
     const msg = e && typeof e === "string" ? e?.split("line")?.[1] : "error";
     res.end(msg ? "line " + msg : "error");
   }
