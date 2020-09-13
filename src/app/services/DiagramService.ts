@@ -11,13 +11,15 @@ const pyagramDir = path.join(rootDir, "pyagram");
 
 export const genDiagram = async (filecontent: string) => {
   const filename = parseFilename(filecontent);
+  const TB = parseTB(filecontent);
   const slugifiedFilename = `${slugify(filename, {
     remove: /[*+~.()'"!:@]/g,
     replacement: "_",
     lower: true,
   })}`;
 
-  const args = `"${slugifiedFilename}", show=False, filename="${slugifiedFilename}"`;
+  let args = `"${filename}", show=False, filename="${slugifiedFilename}"`;
+  if (TB) args += `, direction="${TB}"`;
   const content = filecontent.replace(
     /Diagram\((.*?)\)\:/g,
     `Diagram(${args}):`
@@ -55,4 +57,11 @@ const parseFilename = (filecontent: string) => {
   const matches = reg.exec(filecontent);
 
   return matches?.[2] || "diagram";
+};
+
+const parseTB = (filecontent: string) => {
+  const reg = /Diagram\((.*?)direction="(.*?)"/g;
+  const matches = reg.exec(filecontent);
+
+  return matches?.[2] || "LR";
 };

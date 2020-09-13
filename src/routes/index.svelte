@@ -90,7 +90,7 @@ with Diagram("Grouped Workers", show=False, direction="TB"):
   <title>{title}</title>
 </svelte:head>
 
-<h1>Diagrams as code</h1>
+<h1>Diagram for microservices</h1>
 
 {#if error}
   <p><span style="color:red"> Something went wrong: </span> <br /> {error}</p>
