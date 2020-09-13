@@ -11,7 +11,6 @@
   export let title: string = "Hello Sappagram";
 
   let error: string;
-  let filename: string = "Diagram";
   let filecontent: string = `from diagrams import Diagram
 from diagrams.aws.compute import EC2
 from diagrams.aws.database import RDS
@@ -25,9 +24,11 @@ with Diagram("Grouped Workers", show=False, direction="TB"):
                 EC2("worker5")] >> RDS("events")  
 `;
   let result: string;
+  let loading: boolean;
   async function handleSubmit() {
     result = undefined;
     error = undefined;
+    loading = true;
     const res = await fetch("/diagrams", {
       method: "POST",
       headers: {
@@ -35,9 +36,10 @@ with Diagram("Grouped Workers", show=False, direction="TB"):
       },
       body: JSON.stringify({
         filecontent,
-        filename,
       }),
     });
+
+    loading = false;
 
     if (res.ok) {
       const imageData = await res.blob();
@@ -90,33 +92,26 @@ with Diagram("Grouped Workers", show=False, direction="TB"):
 
 <h1>Diagrams as code</h1>
 
-<figure>
-  {#if result}
-    <a download="diagram.png" href={result} title="ImageName">
-      <img src={result} alt="" />
-    </a>
-    <figcaption>Click image to download</figcaption>
-  {:else}
-    <img style="max-width: 400px" alt="Success Kid" src="successkid.jpg" />
-    <figcaption>Have fun with Sappagram!</figcaption>
-  {/if}
-</figure>
-
 {#if error}
   <p><span style="color:red"> Something went wrong: </span> <br /> {error}</p>
 {/if}
 
-<form on:submit|preventDefault={handleSubmit}>
-  <input
-    required
-    type="text"
-    bind:value={filename}
-    placeholder="Diagram name" />
+<button
+  on:click={handleSubmit}
+  disabled={loading}>{loading ? `Processing...` : 'Build'}</button>
+<div class="flex">
+  <div class="codemirror-container flex">
+    <CodeMirror
+      value={filecontent}
+      on:change={(val) => (filecontent = val.detail.value)} />
+  </div>
 
-  <button type="submit">submit</button>
-</form>
-<div class="codemirror-container flex">
-  <CodeMirror
-    value={filecontent}
-    on:change={(val) => (filecontent = val.detail.value)} />
+  {#if result}
+    <figure>
+      <img src={result} alt="" />
+      <a download="diagram.png" href={result} title="ImageName">
+        Click to download
+      </a>
+    </figure>
+  {/if}
 </div>

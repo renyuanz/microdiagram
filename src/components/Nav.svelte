@@ -59,7 +59,7 @@
     <li>
       <a
         aria-current={segment === undefined ? 'page' : undefined}
-        href=".">Home</a>
+        href=".">Micro Diagram</a>
     </li>
     <li>
       <a
