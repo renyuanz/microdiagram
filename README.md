@@ -4,6 +4,8 @@ Welcome to the Microdiagram codebase, the platform that powers microdiagram.com.
 
 Live website: [https://www.microdiagram.com/](https://www.microdiagram.com/)
 
+This project is built on Node.js (Polka and Sapper with Typescript), but there is also a python version (Flask app), check it out: [diagrams-web](https://github.com/diagrams-web/diagrams-web)
+
 ## What is Microdiagram?
 
 Microdiagram is open source software for building online diagram toolkit. Toolkit for prototyping cloud system architectures, microservices architectures crafted on AWS, Azure, GCP, AlibabaCloud and so on. This is built on the top of a python lib [Diagrams](https://github.com/mingrammer/diagrams) and fully compatible with it.
@@ -11,7 +13,6 @@ Microdiagram is open source software for building online diagram toolkit. Toolki
 microdiagram.com is hosted by Microdiagram. It is a online toolkit for software developers who design architectures, from basic programming concept to cloud-based microservices architecture. The generated architecture images are free to download and use in any format.
 
 You might found the website is quite simple, but more features are planned in the future. The initial idea of building this website was just helping people get started to use [Diagrams](https://github.com/mingrammer/diagrams) without setting up a local python environment.
-
 
 ## Getting started
 
